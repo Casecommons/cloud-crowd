@@ -27,6 +27,10 @@ module CloudCrowd
         FileUtils.cp(local_path, save_path)
         "file://#{File.expand_path(save_path)}"
       end
+
+      def download(request_path, save_path)
+        FileUtils.cp(request_path, save_path)
+      end
       
       # Remove all of a Job's result files from the filesystem.
       def cleanup(job)

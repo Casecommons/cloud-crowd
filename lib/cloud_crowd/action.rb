@@ -18,6 +18,7 @@ module CloudCrowd
   class Action
 
     FILE_URL = /\Afile:\/\//
+    STORAGE_URL = /\Astorage:\/\//
 
     attr_reader :input, :input_path, :file_name, :options, :work_directory
 
@@ -44,6 +45,8 @@ module CloudCrowd
     def download(url, path)
       if url.match(FILE_URL)
         FileUtils.cp(url.sub(FILE_URL, ''), path)
+      elsif url.match(STORAGE_URL)
+        @store.download(url.sub(STORAGE_URL, ''), path)
       else
         File.open(path, 'w+') do |file|
           Net::HTTP.get_response(URI(url)) do |response|

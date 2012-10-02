@@ -34,6 +34,11 @@ module CloudCrowd
         end
       end
 
+      def download(request_path, save_path)
+          data = @bucket.get(request_path.gsub(/^\//, ''))
+          File.open(save_path, 'w') {|f| f.write(data) }
+      end
+
       # Remove all of a Job's resulting files from S3, both intermediate and finished.
       def cleanup(job)
         @bucket.delete_folder("#{job.action}/job_#{job.id}")

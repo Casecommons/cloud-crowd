@@ -1,4 +1,4 @@
-require 'tmpdir'
+#require 'tmpdir'
 
 module CloudCrowd
 

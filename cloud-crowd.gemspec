@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'json',          ['>= 1.1.7']
   s.add_dependency 'rest-client',   ['>= 1.4']
   s.add_dependency 'thin',          ['>= 1.2.4']
+  s.add_dependency 'mimemagic',      ['>= 0.2.0']
 
   if s.respond_to?(:add_development_dependency)
     s.add_development_dependency 'faker',               ['>= 0.3.1']

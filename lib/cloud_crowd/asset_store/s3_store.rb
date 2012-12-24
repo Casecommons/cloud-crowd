@@ -1,4 +1,5 @@
 gem 'right_aws'
+gem 'mimemagic'
 
 module CloudCrowd
   class AssetStore
@@ -25,11 +26,18 @@ module CloudCrowd
       # we're configured to use S3 authentication. Authenticated links expire
       # after one day by default.
       def save(local_path, save_path)
+
+        if(save_path.start_with?("/"))
+          save_path = save_path[1..-1]
+        end
+
+        mimeType = MimeMagic.by_path(save_path)
+
         if @use_auth
-          @bucket.put(save_path, File.open(local_path), {}, 'private')
+          @bucket.put(save_path, File.open(local_path), {}, 'private', {'Content-Type' => mimeType})
           @s3.interface.get_link(@bucket, save_path)
         else
-          @bucket.put(save_path, File.open(local_path), {}, 'public-read')
+          @bucket.put(save_path, File.open(local_path), {}, 'public-read', {'Content-Type' => mimeType})
           @bucket.key(save_path).public_link
         end
       end

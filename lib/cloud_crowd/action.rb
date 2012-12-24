@@ -20,7 +20,7 @@ module CloudCrowd
     FILE_URL = /\Afile:\/\//
     STORAGE_URL = /\Astorage:\/\//
 
-    attr_reader :input, :input_path, :file_name, :options, :work_directory
+    attr_reader :input, :input_path, :file_name, :options, :work_directory, :download_mimetype
 
     # Initializing an Action sets up all of the read-only variables that
     # form the bulk of the API for action subclasses. (Paths to read from and
@@ -50,6 +50,12 @@ module CloudCrowd
       else
         File.open(path, 'w+') do |file|
           Net::HTTP.get_response(URI(url)) do |response|
+            if response.code == "301"
+             return download(response.header['location'], path)
+            end
+
+            @download_mimetype = response.header['content-type']
+
             response.read_body do |chunk|
               file.write chunk
             end
